@@ -50,7 +50,7 @@ class Ares
         group["status"] = "active"
         group["title"] = group_meta[0]
         group["created_by"] = group_meta[1].gsub("Created by ", "")
-        group["subtitle"] = group_meta[2]
+        group["subtitle"] = group_meta[2] || ""
         # icon = https://web.whatsapp.com/invite/icon/#{id}
         #todo: follow to join
       end
