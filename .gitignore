@@ -1,6 +1,6 @@
 Gemfile.lock
 .byebug_history
+storage_session.yaml
 
 chromedriver
-tmp/
-results/
+cache/
