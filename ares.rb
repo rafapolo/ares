@@ -27,10 +27,13 @@ class Ares
   def self.update_meta
     bot = chromebot
 
-    bozaps = JSON.load(File.new "bozaps.json")
+    bozaps = JSON.load(File.new "data/meta_hashes.json")
     bozaps["invites"].each do |group|
+
+      next if group["status"] # already scrapped?
+
       id = group["id"]
-      # puts "=> #{id}..."
+      puts "=> #{id}..."
       bot.get "#{ZAP_URL}/#{id}"
       wait = Selenium::WebDriver::Wait.new(timeout: TIMEOUT)
       wait.until{ bot.find_element(id: "action-button") }
@@ -44,8 +47,10 @@ class Ares
       ok_btn = bot.find_elements(xpath: "//div[contains(text(), 'OK')]")
       ok_btn.first.click if ok_btn.count==1
 
+      #todo: Retry now .click
+
       el = bot.find_elements(xpath: "//span[contains(text(), 'Created by')]")
-      if (el.count==1) #exists!
+      if (el.count==1) #exists
         group_meta = el.first.find_element(xpath: "../..").text.split("\n")
         group["status"] = "active"
         group["title"] = group_meta[0]
@@ -56,11 +61,13 @@ class Ares
       end
       puts group
 
+      group["status"] = "invalid" unless group["status"]
+      File.open("data/meta_hashes.json","w") do |f|
+        f.write(JSON.pretty_generate(bozaps))
+      end
     end
 
-    File.open("results/meta.json","w") do |f|
-      f.write(JSON.pretty_generate(bozaps))
-    end
+
   end
 end
 
