@@ -2,7 +2,7 @@
 ---
 Ares (/ ˈ ɛər iː z /; Ancient Greek: Ἄρης, Áres) is the Greek god of war.
 
-Esse script em Ruby e ChromeDriver extrai e organiza metadados sobre os grupos neo-fascistas do Bozo, como primeiro passo, para possível contra-ação.
+Esse script em Ruby e ChromeDriver extrai e organiza metadados dos grupos de Whatsapp para posterior contra-ação.
 
 ---
 
