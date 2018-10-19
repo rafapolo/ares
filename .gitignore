@@ -1,0 +1,6 @@
+Gemfile.lock
+.byebug_history
+
+chromedriver
+tmp/
+results/
