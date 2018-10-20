@@ -17,10 +17,6 @@ bundle install;
 
 #### run
 ```
+# lê hashes.json com invite de grupos e gera metadados em meta_hashes.json
 ./ares.rb
 ```
----
-##### todo:
-[ ] generate csv metadata
-
-[ ] join group
