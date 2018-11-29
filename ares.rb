@@ -1,13 +1,15 @@
 #!/usr/bin/ruby
 # extrapolo
 
+require "selenium-webdriver"
+require "rspec/retry"
+require "net/http"
+require "json"
+require "yaml"
+require "byebug"
+
 class Ares
-  require "selenium-webdriver"
-  require 'rspec/retry'
-  require 'net/http'
-  require "json"
-  require "yaml"
-  require "byebug"
+  # todo: cmd line. console.
 
   ZAP_URL = "https://chat.whatsapp.com/invite"
   BROWSER = "/usr/lib/chromium-browser/chromedriver"
@@ -22,6 +24,61 @@ class Ares
     Selenium::WebDriver::Chrome.driver_path = BROWSER
     Selenium::WebDriver.for :chrome,
       options: Selenium::WebDriver::Chrome::Options.new(args: %w[--user-data-dir=./cache])
+  end
+
+  def self.parse_history
+    json = []
+    history = []
+    Dir["data/history/*.txt"].each do |file|
+      hist = File.readlines(file)
+      data = {}
+      matched_admin = false
+      hist.each do |line|
+        # match "who" criou o grupo
+        unless matched_admin
+          meta = line.scan(/(\d{2}\/\d{2}\/\d{2} \d{2}:\d{2}) - (.*?) criou o grupo (.*)/)
+          if meta.size==1 && meta.first.count==3 #match!
+            actual = meta.first
+            json << {grupo: actual[2].gsub("\"", ""), created_by: actual[1], file: file}
+            matched_admin = true
+          end
+        end
+
+        # parse lines
+        meta = line.scan(/(\d{2}\/\d{2}\/\d{2} \d{2}:\d{2}) - (.*?:) (.*)/)
+        if meta.size==1 && meta.first.count==3 #match!
+          # close/open msg
+          if data.keys.index "who"
+            history << data
+            data = {}
+          end
+          actual = meta.first
+          data["when"] = actual[0]
+          data["who"] = actual[1].gsub(":", "")
+          data["what"] = actual[2]
+        else
+          # break-line msgs parts
+          unless line.scan(/(\d{2}\/\d{2}\/\d{2} \d{2}:\d{2}) (.+)/)
+            if data.keys.index "who"
+              if data.keys.index "what"
+                data["what"] = data["what"] +"\n"+ line
+              else
+                data["what"] = line
+              end
+            end
+          end
+        end
+      end
+      matched_admin = false
+      json.first["history"] = history
+
+      # save
+      filename = file.split("/").last
+      File.open("data/history/meta_"+filename+".json","w") do |f|
+        f.write(JSON.pretty_generate(json))
+      end
+    end
+    json
   end
 
   def self.update_meta
@@ -66,9 +123,8 @@ class Ares
         f.write(JSON.pretty_generate(bozaps))
       end
     end
-
-
   end
 end
 
-Ares.update_meta
+meta_history = Ares.parse_history
+#pp meta_history
