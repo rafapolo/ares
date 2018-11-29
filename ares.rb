@@ -9,7 +9,7 @@ require "yaml"
 require "byebug"
 
 class Ares
-  # todo: cmd line. console.
+
 
   ZAP_URL = "https://chat.whatsapp.com/invite"
   BROWSER = "/usr/lib/chromium-browser/chromedriver"
@@ -126,5 +126,6 @@ class Ares
   end
 end
 
-meta_history = Ares.parse_history
-#pp meta_history
+
+Ares.parse_history if ARGV[0] == "history"
+Ares.update_meta if ARGV[0] == "meta"
