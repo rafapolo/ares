@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+    arr = "";
+      $(document).ready(function(){
+        $.ajax({
+          url: "zap.txt",
+          success: function(result) {
+              arr = result;
+          }
+        });
+      })
+
+      // http://getspringy.com/
+      
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
