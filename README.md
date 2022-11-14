@@ -22,10 +22,10 @@ bundle install;
 # lê hashes.json com invite de grupos e gera metadados em meta_hashes.json
 ./ares.rb meta
 ```
-=> [sample output](http://git.mostre.me/rafapolo/ares/src/master/data/meta_hashes.json)
+=> [sample output](https://github.com/rafapolo/ares/blob/master/data/meta_hashes.json)
 
 ```
 # lê históricos em data/history e cria .json estruturando mensagens em {who, when, what}
 ./ares.rb history
 ```
-=> [sample output](http://git.mostre.me/rafapolo/ares/src/master/data/history/meta_Bolsonarista_TO.txt.jsonp)
+=> [sample output](https://github.com/rafapolo/ares/blob/master/data/history/meta_Bolsonarista_TO.txt.jsonp)
